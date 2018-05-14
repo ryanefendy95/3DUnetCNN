@@ -20,8 +20,8 @@ def append_basename(in_file, append):
     base, ext = basename.split(".", 1)
     return os.path.join(dirname, base + append + "." + ext)
 
-
-def get_background_mask(in_folder, out_file, truth_name="GlistrBoost_ManuallyCorrected"):
+# GlistrBoost_ManuallyCorrected
+def get_background_mask(in_folder, out_file, truth_name="seg"):
     """
     This function computes a common background mask for all of the data in a subject folder.
     :param in_folder: a subject folder from the BRATS dataset.
@@ -115,11 +115,13 @@ def normalize_image(in_file, out_file, bias_correction=True):
     return out_file
 
 
-def convert_brats_folder(in_folder, out_folder, truth_name="GlistrBoost_ManuallyCorrected",
+def convert_brats_folder(in_folder, out_folder, truth_name="seg",
                          no_bias_correction_modalities=None):
+    print(out_folder)
     for name in config["all_modalities"]:
         image_file = get_image(in_folder, name)
         out_file = os.path.abspath(os.path.join(out_folder, name + ".nii.gz"))
+        # print(out_file)
         perform_bias_correction = no_bias_correction_modalities and name not in no_bias_correction_modalities
         normalize_image(image_file, out_file, bias_correction=perform_bias_correction)
     # copy the truth file
